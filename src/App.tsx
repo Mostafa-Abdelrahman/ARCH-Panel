@@ -14,7 +14,7 @@ import Services from "./pages/Services";
 import Projects from "./pages/Projects";
 import ContactInfo from "./pages/ContactInfo";
 import SocialLinks from "./pages/SocialLinks";
-import FooterContent from "./pages/FooterContent";
+import SettingsContent from "./pages/SettingsContent";
 import ContactMessages from "./pages/ContactMessages";
 import AuditLogs from "./pages/AuditLogs";
 import NotFound from "./pages/NotFound";
@@ -40,7 +40,7 @@ const App = () => (
               <Route path="projects" element={<Projects />} />
               <Route path="contact-info" element={<ContactInfo />} />
               <Route path="social-links" element={<SocialLinks />} />
-              <Route path="footer" element={<FooterContent />} />
+              <Route path="settings" element={<SettingsContent />} />
               <Route path="messages" element={<ContactMessages />} />
               <Route path="audit-logs" element={<AuditLogs />} />
             </Route>

@@ -7,41 +7,45 @@ import { Textarea } from '@/components/ui/textarea';
 import { api, handleApiError } from '@/lib/api';
 import { toast } from '@/hooks/use-toast';
 
-const FooterContent = () => {
+const SettingsContent = () => {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     companyName: '',
     description: '',
+    policyText: '',
+    termText: '',
     copyrightText: '',
   });
 
   useEffect(() => {
-    loadFooterContent();
+    loadSettingsContent();
   }, []);
 
-  const loadFooterContent = async () => {
+  const loadSettingsContent = async () => {
     try {
-      const response = await api.getFooterContent();
+      const response = await api.getSettingsContent();
       
       // Handle the API response format: { success: true, data: {...} }
-      let footerData: any = {};
+      let settingsData: any = {};
       if (response && typeof response === 'object') {
         if ('success' in response && 'data' in response && response.success) {
-          footerData = (response as any).data || {};
+          settingsData = (response as any).data || {};
         } else if (response && !('success' in response)) {
-          footerData = response;
+          settingsData = response;
         }
       }
       
-      if (footerData) {
+      if (settingsData) {
         setFormData({
-          companyName: footerData.companyName || '',
-          description: footerData.description || '',
-          copyrightText: footerData.copyrightText || '',
+          companyName: settingsData.companyName || '',
+          description: settingsData.description || '',
+          policyText: settingsData.policyText || '',
+          termText: settingsData.termText || '',
+          copyrightText: settingsData.copyrightText || '',
         });
       }
     } catch (error) {
-      console.error('Failed to fetch footer content:', error);
+      console.error('Failed to fetch settings content:', error);
       handleApiError(error);
     } finally {
       setLoading(false);
@@ -60,16 +64,16 @@ const FooterContent = () => {
         return;
       }
 
-      const footerData = {
+      const settingsData = {
         companyName: formData.companyName.trim(),
         description: formData.description.trim(),
         copyrightText: formData.copyrightText.trim(),
         isActive: true
       };
 
-      await api.updateFooterContent(footerData);
-      toast({ title: 'Success', description: 'Footer content updated successfully' });
-      loadFooterContent();
+      await api.updateSettingsContent(settingsData);
+      toast({ title: 'Success', description: 'Settings content updated successfully' });
+      loadSettingsContent();
     } catch (error) {
       handleApiError(error);
     }
@@ -82,13 +86,13 @@ const FooterContent = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Footer Content</h1>
-        <p className="text-muted-foreground mt-1">Edit your website footer information</p>
+        <h1 className="text-3xl font-bold">Settings Content</h1>
+        <p className="text-muted-foreground mt-1">Edit your website settings information</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Footer Information</CardTitle>
+          <CardTitle>Settings Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -108,6 +112,26 @@ const FooterContent = () => {
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={4}
               placeholder="A comprehensive description of your company, services, and mission"
+            />
+          </div>
+          <div>
+            <Label htmlFor="policyText">Policy Text *</Label>
+            <Textarea
+              id="policyText"
+              value={formData.policyText}
+              onChange={(e) => setFormData({ ...formData, policyText: e.target.value })}
+              rows={4}
+              placeholder="Your company's policy information"
+            />
+          </div>
+          <div>
+            <Label htmlFor="termText">Terms Text *</Label>
+            <Textarea
+              id="termText"
+              value={formData.termText}
+              onChange={(e) => setFormData({ ...formData, termText: e.target.value })}
+              rows={4}
+              placeholder="Your company's terms and conditions"
             />
           </div>
           <div>
@@ -145,4 +169,4 @@ const FooterContent = () => {
   );
 };
 
-export default FooterContent;
+export default SettingsContent;

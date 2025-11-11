@@ -213,20 +213,21 @@ const Projects = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Projects</h1>
-          <p className="text-muted-foreground mt-1">Manage your portfolio projects</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">Projects</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">Manage your portfolio projects</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={(open) => {
           setIsDialogOpen(open);
           if (!open) resetForm();
         }}>
           <DialogTrigger asChild>
-            <Button>
+            <Button className="w-full sm:w-auto">
               <Plus className="h-4 w-4 mr-2" />
-              Add Project
+              <span className="sm:hidden">Add</span>
+              <span className="hidden sm:inline">Add Project</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-3xl">
@@ -234,7 +235,7 @@ const Projects = () => {
               <DialogTitle>{editingProject ? 'Edit Project' : 'Create New Project'}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="title">Title *</Label>
                   <Input
@@ -320,7 +321,7 @@ const Projects = () => {
                 </Tabs>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="status">Status *</Label>
                   <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
@@ -348,7 +349,7 @@ const Projects = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="location">Location</Label>
                   <Input
@@ -369,7 +370,7 @@ const Projects = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="area">Area</Label>
                   <Input
@@ -448,7 +449,7 @@ const Projects = () => {
         </Dialog>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {Array.isArray(projects) && projects.length > 0 ? (
           projects.map((project) => (
             <Card key={project.id}>
@@ -533,8 +534,8 @@ const Projects = () => {
                     )}
                   </div>
                 )}
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => openEditDialog(project)}>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Button variant="outline" size="sm" onClick={() => openEditDialog(project)} className="flex-1 sm:flex-none">
                     <Edit className="h-4 w-4 mr-1" />
                     Edit
                   </Button>
@@ -542,11 +543,13 @@ const Projects = () => {
                     variant={project.isActive ? "secondary" : "outline"} 
                     size="sm" 
                     onClick={() => handleToggleStatus(project.id)}
+                    className="flex-1 sm:flex-none text-xs sm:text-sm"
                   >
                     {project.isActive ? 'Deactivate' : 'Activate'}
                   </Button>
-                  <Button variant="destructive" size="sm" onClick={() => handleDelete(project.id)}>
+                  <Button variant="destructive" size="sm" onClick={() => handleDelete(project.id)} className="sm:w-auto">
                     <Trash2 className="h-4 w-4" />
+                    <span className="sm:hidden ml-1">Delete</span>
                   </Button>
                 </div>
               </CardContent>

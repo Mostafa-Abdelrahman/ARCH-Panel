@@ -1,7 +1,7 @@
 import { toast } from "@/hooks/use-toast";
 
 // Get API base URL from environment variable or default to localhost
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://arch-server-production-3f1e.up.railway.app';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 //tt
 export interface ApiError {
   message: string;
@@ -333,12 +333,12 @@ class ApiClient {
   }
 
   // Footer Content endpoints
-  async getFooterContent() {
-    return this.request<any>('/api/content/footer');
+  async getSettingsContent() {
+    return this.request<any>('/api/content/settings');
   }
 
-  async updateFooterContent(data: any) {
-    return this.request<any>('/api/content/footer', {
+  async updateSettingsContent(data: any) {
+    return this.request<any>('/api/content/settings', {
       method: 'PUT',
       body: JSON.stringify(data),
     });
@@ -372,25 +372,6 @@ class ApiClient {
     return this.request<any[]>(`/api/admins/audit-logs${queryString ? `?${queryString}` : ''}`);
   }
 
-  // Media upload endpoint
-  async uploadMedia(file: File, folder?: string) {
-    const formData = new FormData();
-    formData.append('file', file);
-    if (folder) formData.append('folder', folder);
-
-    return this.request<{ url: string }>('/api/media/upload', {
-      method: 'POST',
-      body: formData,
-      headers: {}, // Let browser set Content-Type for FormData
-    });
-  }
-
-  async deleteMedia(url: string) {
-    return this.request('/api/media', {
-      method: 'DELETE',
-      body: JSON.stringify({ url }),
-    });
-  }
 }
 
 export const api = new ApiClient(API_BASE_URL);

@@ -1,6 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
+import {
+  Sidebar as SidebarPrimitive,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+  SidebarSeparator,
+} from '@/components/ui/sidebar';
 import {
   LayoutDashboard,
   Users,
@@ -14,6 +24,7 @@ import {
   Mail,
   ClipboardList,
   LogOut,
+  User,
 } from 'lucide-react';
 
 const navigation = [
@@ -25,7 +36,7 @@ const navigation = [
   { name: 'Projects', href: '/projects', icon: FolderKanban },
   { name: 'Contact Info', href: '/contact-info', icon: Phone },
   { name: 'Social Links', href: '/social-links', icon: Share2 },
-  { name: 'Footer Content', href: '/footer', icon: FileText },
+  { name: 'Settings Content', href: '/settings', icon: FileText },
   { name: 'Messages', href: '/messages', icon: Mail },
   { name: 'Audit Logs', href: '/audit-logs', icon: ClipboardList },
 ];
@@ -35,45 +46,66 @@ const Sidebar = () => {
   const { logout, admin } = useAuth();
 
   return (
-    <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
-      <div className="p-6 border-b border-sidebar-border">
-        <h1 className="text-xl font-bold text-sidebar-foreground">Admin Panel</h1>
-        <p className="text-sm text-sidebar-foreground/70 mt-1">{admin?.name}</p>
-      </div>
+    <SidebarPrimitive variant="inset" collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <Link to="/dashboard">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <User className="size-4" />
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">Admin Panel</span>
+                  <span className="truncate text-xs">{admin?.name || 'Administrator'}</span>
+                </div>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        {navigation.map((item) => {
-          const Icon = item.icon;
-          const isActive = location.pathname === item.href;
-          
-          return (
-            <Link
-              key={item.name}
-              to={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-sidebar-primary text-sidebar-primary-foreground'
-                  : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
-              }`}
-            >
-              <Icon className="h-5 w-5" />
-              {item.name}
-            </Link>
-          );
-        })}
-      </nav>
+      <SidebarContent>
+        <SidebarMenu>
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.href;
+            
+            return (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive}
+                  tooltip={item.name}
+                >
+                  <Link to={item.href}>
+                    <Icon />
+                    <span>{item.name}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarContent>
 
-      <div className="p-4 border-t border-sidebar-border">
-        <Button
-          variant="ghost"
-          className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-          onClick={logout}
-        >
-          <LogOut className="h-5 w-5 mr-3" />
-          Logout
-        </Button>
-      </div>
-    </aside>
+      <SidebarFooter>
+        <SidebarSeparator className="mb-2" />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={logout}
+              tooltip="Logout"
+              className="w-full"
+            >
+              <LogOut />
+              <span>Logout</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+      <SidebarRail />
+    </SidebarPrimitive>
   );
 };
 

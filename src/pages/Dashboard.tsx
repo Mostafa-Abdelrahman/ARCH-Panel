@@ -105,23 +105,23 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Welcome to your admin panel</p>
+        <h1 className="text-2xl sm:text-3xl font-bold">Dashboard</h1>
+        <p className="text-muted-foreground mt-1 text-sm sm:text-base">Welcome to your admin panel</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat) => (
           <Card key={stat.title}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
                 {stat.title}
               </CardTitle>
               <stat.icon className={`h-4 w-4 ${stat.color}`} />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
+              <div className="text-xl sm:text-2xl font-bold">{stat.value}</div>
             </CardContent>
           </Card>
         ))}
@@ -139,15 +139,15 @@ const Dashboard = () => {
               stats.recentLogs.map((log: any) => (
                 <div
                   key={log.id}
-                  className="flex items-start justify-between border-b pb-3 last:border-0"
+                  className="flex flex-col sm:flex-row sm:items-start sm:justify-between border-b pb-3 last:border-0 gap-1 sm:gap-0"
                 >
-                  <div>
+                  <div className="flex-1">
                     <p className="text-sm font-medium">{log.action}</p>
                     <p className="text-xs text-muted-foreground mt-1">
                       {log.entityType} {log.entityId && `• ${log.entityId}`}
                     </p>
                   </div>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-muted-foreground sm:ml-4">
                     {new Date(log.createdAt).toLocaleString()}
                   </span>
                 </div>
